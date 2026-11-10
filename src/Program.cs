@@ -1,7 +1,16 @@
-﻿using Instructions;
+﻿using Lexer;
 
-foreach (Opcode opcode in Enum.GetValues(typeof(Opcode)))
+Tokenizer tokenizer = new Tokenizer();
+
+string[] instructions =
 {
-    int value = (int)opcode;
-    Console.WriteLine($"{opcode} | Decimal: {value} | Binary: {Convert.ToString(value, 2).PadLeft(4, '0')}");
+    "MOVI R1, 10",
+    "ADD R1, R1, R2",
+    "HALT"
+};
+
+foreach (string instruction in instructions)
+{
+    string[] tokens = tokenizer.Tokenize(instruction);
+    Console.WriteLine(string.Join(" | ", tokens));
 }
