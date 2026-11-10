@@ -1,20 +1,23 @@
-﻿using Instructions;
-using Lexer;
+﻿using Lexer;
 using Parser;
+using Encoder;
 
 Tokenizer tokenizer = new Tokenizer();
 InstructionParser parser = new InstructionParser();
+InstructionEncoder encoder = new InstructionEncoder();
 
-string[] instructions =
-{
+string[] assemblys = [
     "MOVI R1, 10",
+    "MOVI R2, 5",
     "ADD R1, R1, R2",
     "SUB R3, R1, R2"
-};
+];
 
-foreach (string line in instructions)
+foreach (var assembly in assemblys)
 {
-    string[] tokens = tokenizer.Tokenize(line);
-    Instruction result = parser.Parse(tokens);
-    Console.WriteLine($"{result.Opcode} | {result.Destination} | {result.Source1} | {result.Source2} | {result.Immediate}");
+    string[] tokens = tokenizer.Tokenize(assembly);
+    var instruction = parser.Parse(tokens);
+    string machineCode = encoder.Encode(instruction);
+
+    Console.WriteLine(machineCode);
 }
