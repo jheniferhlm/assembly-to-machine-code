@@ -1,16 +1,15 @@
 ﻿using Lexer;
+using Parser;
 
 Tokenizer tokenizer = new Tokenizer();
+InstructionParser parser = new InstructionParser();
 
-string[] instructions =
-{
-    "MOVI R1, 10",
-    "ADD R1, R1, R2",
-    "HALT"
-};
+string instruction = "MOVI R1, 10";
 
-foreach (string instruction in instructions)
-{
-    string[] tokens = tokenizer.Tokenize(instruction);
-    Console.WriteLine(string.Join(" | ", tokens));
-}
+string[] tokens = tokenizer.Tokenize(instruction);
+
+var result = parser.Parse(tokens);
+
+Console.WriteLine($"Opcode: {result.Opcode}");
+Console.WriteLine($"Destination: {result.Destination}");
+Console.WriteLine($"Immediate: {result.Immediate}");
