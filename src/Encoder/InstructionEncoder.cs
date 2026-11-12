@@ -39,6 +39,24 @@ namespace Encoder
                     source2 = "00";
 
                     return opcode + destination + source1 + source2 + reserved;
+                case Opcode.LOAD:
+                case Opcode.STORE:
+                case Opcode.JZ:
+                    opcode = Convert.ToString(Convert.ToInt32(instruction.Opcode), 2).PadLeft(4, '0');
+                    source1 = Convert.ToString(instruction.Source1, 2).PadLeft(2, '0');
+                    immediate = Convert.ToString(instruction.Immediate, 2).PadLeft(10, '0');
+
+                    return opcode + source1 + immediate;
+                case Opcode.JMP:
+                    opcode = Convert.ToString(Convert.ToInt32(instruction.Opcode), 2).PadLeft(4, '0');
+                    immediate = Convert.ToString(instruction.Immediate, 2).PadLeft(12, '0');
+
+                    return opcode + immediate;
+                case Opcode.HALT:
+                    opcode = Convert.ToString(Convert.ToInt32(instruction.Opcode), 2).PadLeft(4, '0');
+                    reserved = "000000000000";
+
+                    return opcode + reserved;
                 default:
                     throw new Exception("Something went wrong when encoding.");
             }
