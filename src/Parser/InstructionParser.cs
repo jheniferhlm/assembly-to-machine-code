@@ -25,6 +25,14 @@ namespace Parser
             return immediateNumber >= 0 && immediateNumber <= 1023;
         }
 
+        public bool ValidateAddress(string address)
+        {
+            if (!int.TryParse(address, out int addressNumber))
+                return false;
+
+            return addressNumber >= 0 && addressNumber <= 4095;
+        }
+
         public Instruction Parse(string[] tokens)
         {
             if (tokens == null || tokens.Length == 0)
@@ -89,6 +97,49 @@ namespace Parser
                     {
                         throw new Exception("The registers are invalid.");
                     }
+                case "LOAD":
+                case "STORE":
+                case "JZ":
+                    if (tokens.Length != 3)
+                            throw new Exception("Invalid tokens length.");
+
+                    if (ValidateRegister(tokens[1]) && ValidateImmediate(tokens[2]))
+                    {   
+                        return new Instruction()
+                        {
+                            Opcode = (Opcode)Enum.Parse(typeof(Opcode), tokens[0]),
+                            Source1 = Convert.ToInt32(tokens[1].Substring(1)),
+                            Immediate = Convert.ToInt32(tokens[2])
+                        };
+                    }
+                    else
+                    {
+                        throw new Exception("The registers are invalid.");
+                    }
+                case "JMP":
+                    if (tokens.Length != 2)
+                            throw new Exception("Invalid tokens length.");
+
+                    if (ValidateAddress(tokens[1]))
+                    {   
+                        return new Instruction()
+                        {
+                            Opcode = (Opcode)Enum.Parse(typeof(Opcode), tokens[0]),
+                            Immediate = Convert.ToInt32(tokens[1])
+                        };
+                    }
+                    else
+                    {
+                        throw new Exception("The registers are invalid.");
+                    }
+                case "HALT":
+                    if (tokens.Length != 1)
+                            throw new Exception("Invalid tokens length.");
+
+                    return new Instruction()
+                    {
+                        Opcode = (Opcode)Enum.Parse(typeof(Opcode), tokens[0])
+                    };
                 default:
                     throw new Exception("Error parsing the tokens.");
             }
