@@ -51,6 +51,9 @@ namespace Parser
                     }
                 case "ADD":
                 case "SUB":
+                case "AND":
+                case "OR":
+                case "XOR":
                     if (tokens.Length != 4)
                             throw new Exception("Invalid tokens length.");
 
@@ -62,6 +65,24 @@ namespace Parser
                             Destination = Convert.ToInt32(tokens[1].Substring(1)),
                             Source1 = Convert.ToInt32(tokens[2].Substring(1)),
                             Source2 = Convert.ToInt32(tokens[3].Substring(1))
+                        };
+                    }
+                    else
+                    {
+                        throw new Exception("The registers are invalid.");
+                    }
+                case "NOT":
+                    if (tokens.Length != 3)
+                        throw new Exception("Invalid tokens length.");
+
+                    if (ValidateRegister(tokens[1]) && ValidateRegister(tokens[2]))
+                    {
+                        return new Instruction()
+                        {
+                            Opcode = (Opcode)Enum.Parse(typeof(Opcode), tokens[0]),
+                            Destination = Convert.ToInt32(tokens[1].Substring(1)),
+                            Source1 = Convert.ToInt32(tokens[2].Substring(1)),
+                            Source2 = 0
                         };
                     }
                     else
