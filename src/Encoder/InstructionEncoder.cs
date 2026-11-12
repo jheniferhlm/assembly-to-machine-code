@@ -23,10 +23,20 @@ namespace Encoder
                     return opcode + destination + immediate;    
                 case Opcode.ADD:
                 case Opcode.SUB:
+                case Opcode.AND:
+                case Opcode.OR:
+                case Opcode.XOR:
                     opcode = Convert.ToString(Convert.ToInt32(instruction.Opcode), 2).PadLeft(4, '0');
                     destination = Convert.ToString(instruction.Destination, 2).PadLeft(2, '0');
                     source1 = Convert.ToString(instruction.Source1, 2).PadLeft(2, '0');
                     source2 = Convert.ToString(instruction.Source2, 2).PadLeft(2, '0');
+
+                    return opcode + destination + source1 + source2 + reserved;
+                case Opcode.NOT:
+                    opcode = Convert.ToString(Convert.ToInt32(instruction.Opcode), 2).PadLeft(4, '0');
+                    destination = Convert.ToString(instruction.Destination, 2).PadLeft(2, '0');
+                    source1 = Convert.ToString(instruction.Source1, 2).PadLeft(2, '0');
+                    source2 = "00";
 
                     return opcode + destination + source1 + source2 + reserved;
                 default:
